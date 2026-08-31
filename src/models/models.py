@@ -7,7 +7,7 @@ from src.repository.database.db import Base
 class Booking(Base):
     __tablename__ = "bookings"
 
-    id: Mapped[int] = mapped_column(Integer())
+    id: Mapped[int] = mapped_column(Integer(), primary_key=True)
     name: Mapped[str] = mapped_column(String())
     phone: Mapped[int] = mapped_column(Integer())
     booking_date: Mapped[datetime] = mapped_column(DateTime())
