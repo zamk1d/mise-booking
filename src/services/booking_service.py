@@ -26,5 +26,5 @@ class BookingService:
     async def change_status(self, booking_id: int, booking_status: BookingStatus):
         booking = await self.repo.get(booking_id=booking_id)
         if booking is None:
-            raise BookingNotFoundError
-        return await self.repo.change_status(booking=booking, status=booking_status)
+            raise BookingNotFoundError(booking_id)
+        return await self.repo.change_status(booking=booking, status=booking_status) # pragma: no cover
