@@ -2,8 +2,8 @@ from sqlalchemy import String, Integer, Enum, Date, Time
 from sqlalchemy.orm import Mapped, mapped_column
 from datetime import date, time
 
-from schemas.booking import BookingStatus
-from database.db import Base
+from src.schemas.booking import BookingStatus
+from src.database.db import Base
 
 class Booking(Base):
     __tablename__ = "bookings"
