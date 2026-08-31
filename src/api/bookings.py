@@ -1,6 +1,6 @@
 from enum import Enum
 
-from fastapi import APIRouter, Body, Depends, HTTPException
+from fastapi import APIRouter, Body, Depends, Query
 from typing import Annotated
 from datetime import date
 
@@ -23,11 +23,11 @@ async def create_booking(
 
 @api.get("/", status_code=200, response_model=list[BookingResponse])
 async def get_bookings(
-        limit: int = 50,
-        offset: int = 0,
+        limit: int = Query(default=50, ge=1, le=100, description="Max number of bookings to return"),
+        offset: int = Query(default=0, ge=0, description="Number of bookings to skip"),
         bookings_date: date | None = None,
         service: BookingService = Depends(get_booking_service)
-) -> BookingResponse:
+) -> list[BookingResponse]:
     """returns list of a books with pagination and filtration by date opportunity"""
     bookings_list = await service.list_bookings(
         limit=limit,
