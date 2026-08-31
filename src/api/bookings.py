@@ -10,7 +10,7 @@ from src.api.depends import get_booking_service
 from src.services.booking_service import BookingService
 from src.schemas.booking import BookingResponse, BookingCreate
 
-api = APIRouter(prefix="bookings", tags=["bookings"])
+api = APIRouter(prefix="/bookings", tags=["bookings"])
 
 @api.post("/", status_code=201, response_model=BookingResponse)
 async def create_booking(
