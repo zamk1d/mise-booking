@@ -1,6 +1,6 @@
-from sqlalchemy import String, Integer, DateTime, Enum
+from sqlalchemy import String, Integer, Enum, Date, Time
 from sqlalchemy.orm import Mapped, mapped_column
-from datetime import datetime
+from datetime import date, time
 
 from schemas.booking import BookingStatus
 from database.db import Base
@@ -10,8 +10,8 @@ class Booking(Base):
 
     id: Mapped[int] = mapped_column(Integer(), primary_key=True)
     name: Mapped[str] = mapped_column(String())
-    phone: Mapped[int] = mapped_column(Integer())
-    booking_date: Mapped[datetime] = mapped_column(DateTime())
-    booking_time: Mapped[int] = mapped_column(Integer())
+    phone: Mapped[str] = mapped_column(String())
+    booking_date: Mapped[date] = mapped_column(Date())
+    booking_time: Mapped[time] = mapped_column(Time())
     guests_number: Mapped[int] = mapped_column(Integer())
     status: Mapped[str] = mapped_column(Enum(BookingStatus), default=BookingStatus.active)
