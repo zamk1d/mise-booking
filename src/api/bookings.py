@@ -42,19 +42,17 @@ async def get_booking(
         service: BookingService = Depends(get_booking_service)
 ) -> BookingResponse:
     """returns booking by id"""
-    try:
-        booking = await service.get_booking(
-            booking_id=booking_id
-        )
-    except BookingNotFoundError:
-        raise HTTPException(status_code=404, detail="Booking not found")
+    booking = await service.get_booking(
+        booking_id=booking_id
+    )
 
     return BookingResponse.model_validate(booking)
 
-@api.delete("/{booking_id}", status_code=204)
+@api.delete("/{booking_id}", status_code=200, response_model=BookingResponse)
 async def delete_booking(
         booking_id: int,
         service: BookingService = Depends(get_booking_service)
-):
+)-> BookingResponse:
     """changes status of a booking from 'active' to 'canceled'"""
-    await service.change_status(booking_id=booking_id, booking_status=BookingStatus.cancelled)
+    booking = await service.change_status(booking_id=booking_id, booking_status=BookingStatus.cancelled)
+    return BookingResponse.model_validate(booking)
