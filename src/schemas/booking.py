@@ -40,6 +40,15 @@ class BookingCreate(BookingBase):
             raise ValueError("Only booking in the 90 days is allowed")
         return value
 
+    @field_validator("booking_time")
+    @classmethod
+    def validate_booking_time(cls, value: time) -> time:
+        if value.minute != 0 or value.second != 0:
+            raise ValueError("Only hourly slots are allowed")
+        if value.hour not in range(12, 22):
+            raise ValueError("Only reservation between 12:00 and 23:00 is allowed")
+        return value
+
 class BookingResponse(BookingCreate):
     model_config = ConfigDict(from_attributes=True)
 
