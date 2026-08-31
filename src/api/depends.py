@@ -1,7 +1,7 @@
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from services.booking_service import BookingService
+from src.services.booking_service import BookingService
 from src.database.db import get_db
 from src.repository.booking_repository import BookingRepository
 

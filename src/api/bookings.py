@@ -4,8 +4,8 @@ from fastapi import APIRouter, Body, Depends, HTTPException
 from typing import Annotated
 from datetime import date
 
-from schemas.booking import BookingStatus
-from services.custom_exc import BookingNotFoundError
+from src.schemas.booking import BookingStatus
+from src.services.custom_exc import BookingNotFoundError
 from src.api.depends import get_booking_service
 from src.services.booking_service import BookingService
 from src.schemas.booking import BookingResponse, BookingCreate

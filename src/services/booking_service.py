@@ -1,5 +1,5 @@
 from datetime import date
-from schemas.booking import BookingCreate, BookingStatus
+from src.schemas.booking import BookingCreate, BookingStatus
 from src.services.custom_exc import BookingNotFoundError, BookingAlreadyExistsError
 from src.repository.booking_repository import BookingRepository
 
