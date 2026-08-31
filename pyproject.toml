@@ -1,0 +1,27 @@
+[project]
+name = "mise-booking"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "zamk1d", email = "minecrafttvem@gmail.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.141.1",
+    "sqlalchemy>=2.0.52",
+    "uvicorn>=0.52.4",
+]
+
+[project.scripts]
+mise-booking = "mise_booking:main"
+
+[build-system]
+requires = ["uv_build>=0.12.1,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pytest>=9.1.1",
+    "ruff>=0.16.5",
+]
