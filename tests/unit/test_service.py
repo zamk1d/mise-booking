@@ -65,5 +65,5 @@ class TestGetBooking:
         mock_repo.get.return_value = None
         service = BookingService(mock_repo)
         with pytest.raises(BookingNotFoundError):
-            await service.change_status(booking_id=123, booking_status=BookingStatus.cancelled)
+            await service.change_status(booking_id=123, booking_status=BookingStatus.canceled)
         mock_repo.get.assert_awaited_once_with(booking_id=123)

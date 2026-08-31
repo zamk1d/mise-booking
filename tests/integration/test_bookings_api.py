@@ -91,7 +91,7 @@ class TestDeleteBooking:
         body = response.json()
         scheme = BookingResponse.model_validate(body)
         assert scheme.name == "John Lenon"
-        assert scheme.status == BookingStatus.cancelled
+        assert scheme.status == BookingStatus.canceled
 
     async def test_delete_not_existing_returns_404(self, client):
         response = await client.delete("/bookings/123")

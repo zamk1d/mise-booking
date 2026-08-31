@@ -1,11 +1,7 @@
-from enum import Enum
-
 from fastapi import APIRouter, Body, Depends, Query
 from typing import Annotated
-from datetime import date
-
+import datetime
 from src.schemas.booking import BookingStatus
-from src.services.custom_exc import BookingNotFoundError
 from src.api.depends import get_booking_service
 from src.services.booking_service import BookingService
 from src.schemas.booking import BookingResponse, BookingCreate
@@ -25,14 +21,14 @@ async def create_booking(
 async def get_bookings(
         limit: int = Query(default=50, ge=1, le=100, description="Max number of bookings to return"),
         offset: int = Query(default=0, ge=0, description="Number of bookings to skip"),
-        bookings_date: date | None = None,
+        date: datetime.date | None = None,
         service: BookingService = Depends(get_booking_service)
 ) -> list[BookingResponse]:
     """returns list of a books with pagination and filtration by date opportunity"""
     bookings_list = await service.list_bookings(
         limit=limit,
         offset=offset,
-        booking_date=bookings_date
+        booking_date=date
     )
     return bookings_list # pragma: no cover
 
@@ -54,5 +50,5 @@ async def delete_booking(
         service: BookingService = Depends(get_booking_service)
 )-> BookingResponse:
     """changes status of a booking from 'active' to 'canceled'"""
-    booking = await service.change_status(booking_id=booking_id, booking_status=BookingStatus.cancelled)
+    booking = await service.change_status(booking_id=booking_id, booking_status=BookingStatus.canceled)
     return BookingResponse.model_validate(booking) # pragma: no cover

@@ -61,8 +61,8 @@ class TestBookingRepository:
     async def test_change_status(self, db_session):
         repo = BookingRepository(db_session)
         created = await repo.create(**valid_data())
-        updated = await repo.change_status(created, BookingStatus.cancelled)
-        assert updated.status == BookingStatus.cancelled
+        updated = await repo.change_status(created, BookingStatus.canceled)
+        assert updated.status == BookingStatus.canceled
         fetched = await repo.get(created.id)
-        assert fetched.status == BookingStatus.cancelled
+        assert fetched.status == BookingStatus.canceled
 

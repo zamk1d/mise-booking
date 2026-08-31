@@ -9,7 +9,7 @@ from src.core.config import settings
 
 class BookingStatus(str, Enum):
     active = "active"
-    cancelled = "canceled"
+    canceled = "canceled"
 
 class BookingBase(BaseModel):
     name: str = Field(
