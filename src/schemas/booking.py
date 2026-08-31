@@ -10,9 +10,21 @@ class BookingStatus(str, Enum):
     cancelled = "canceled"
 
 class BookingBase(BaseModel):
-    name: str = Field(min_length=2)
-    phone: str
-    guests_number: int = Field(ge=1, le=12)
+    name: str = Field(
+        min_length=2,
+        description="Your name",
+        examples=["John"]
+    )
+    phone: str = Field(
+        description="Your phone number",
+        examples=["+79998765432", "+7-(999)-876-54-32", "89998765432"]
+    )
+    guests_number: int = Field(
+        ge=1,
+        le=12,
+        description="Number of guests you planning to come. Maximum - 12",
+        examples=["1", "2"]
+    )
 
     @field_validator("phone")
     @classmethod
@@ -25,8 +37,14 @@ class BookingBase(BaseModel):
         )
 
 class BookingCreate(BookingBase):
-    booking_date: date
-    booking_time: time
+    booking_date: date = Field(
+        description="A date when you planning to come",
+        examples=["2026-12-01"]
+    )
+    booking_time: time = Field(
+        description="A time when you planning to come, only hourly slots available",
+        examples=["12:00", "13:00", "23:00"]
+    )
 
     @field_validator("booking_date")
     @classmethod
@@ -48,6 +66,18 @@ class BookingCreate(BookingBase):
         if value.hour not in range(12, 22):
             raise ValueError("Only reservation between 12:00 and 23:00 is allowed")
         return value
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "name": "John Lenon",
+                "phone": "+79998765432",
+                "guests": 2,
+                "booking_date": "2026-09-15",
+                "booking_time": "18:00"
+            }
+        }
+    )
 
 class BookingResponse(BookingCreate):
     model_config = ConfigDict(from_attributes=True)
