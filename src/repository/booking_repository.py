@@ -4,6 +4,7 @@ from enum import Enum
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.schemas.booking import BookingStatus
 from src.models.models import Booking
 
 
@@ -22,7 +23,7 @@ class BookingRepository:
             select(Booking).where(
                 Booking.booking_date == booking_date,
                 Booking.booking_time == booking_time,
-                Booking.status == Enum("active")
+                Booking.status == BookingStatus.active
             )
         )
         return result.scalar_one_or_none()
