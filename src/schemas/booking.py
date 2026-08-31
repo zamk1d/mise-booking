@@ -26,6 +26,13 @@ class BookingBase(BaseModel):
         examples=["1", "2"]
     )
 
+    @field_validator("name")
+    @classmethod
+    def validate_name(cls, value: str) -> str:
+        if not re.fullmatch(r"[A-Za-zA-Яя-Ёё\s\-]+", value):
+            raise ValueError("Name must be only leters, spaces and hyphens")
+        return value
+
     @field_validator("phone")
     @classmethod
     def validate_phone(cls, value: str) -> str:
@@ -63,16 +70,23 @@ class BookingCreate(BookingBase):
     def validate_booking_time(cls, value: time) -> time:
         if value.minute != 0 or value.second != 0:
             raise ValueError("Only hourly slots are allowed")
-        if value.hour not in range(12, 22):
+        if value.hour not in range(12, 23):
             raise ValueError("Only reservation between 12:00 and 23:00 is allowed")
         return value
+
+    @model_validator(mode="after")
+    def validate_datetime_together(self) -> "BookingCreate":
+        booking_datetime = datetime.combine(self.booking_date, self.booking_time)
+        if booking_datetime < datetime.now():
+            raise ValueError("Cannot book a time slot in the past")
+        return self
 
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
                 "name": "John Lenon",
                 "phone": "+79998765432",
-                "guests": 2,
+                "guests_number": 2,
                 "booking_date": "2026-09-15",
                 "booking_time": "18:00"
             }
