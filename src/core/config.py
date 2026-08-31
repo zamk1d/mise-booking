@@ -9,11 +9,11 @@ class Settings(BaseSettings):
 
     app_name: str = "mise-booking"
     debug: bool = False
-    db_path: str = "./app.db"
+    DB_PATH: str = "./app.db"
 
     @property
     def database_url(self) -> str:
-        return f"sqlite+aiosqlite:///{self.db_path}"
+        return f"sqlite+aiosqlite:///{self.DB_PATH}"
 
 
 settings = Settings()
