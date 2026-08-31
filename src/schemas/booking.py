@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field, ConfigDict, field_validator, model_valida
 
 class BookingStatus(str, Enum):
     active = "active"
-    cancelled = "cancelled"
+    cancelled = "canceled"
 
 class BookingBase(BaseModel):
     name: str = Field(min_length=2)
