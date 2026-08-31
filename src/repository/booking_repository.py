@@ -42,10 +42,10 @@ class BookingRepository:
     async def create(self, **kwargs) -> Booking:
         booking = Booking(**kwargs)
         self.session.add(booking)
-        await self.session.commit()
+        await self.session.flush()
         return booking
 
     async def change_status(self, booking: Booking, status) -> Booking:
         booking.status = status
-        await self.session.commit()
+        await self.session.flush()
         return booking
