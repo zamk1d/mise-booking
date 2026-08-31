@@ -3,7 +3,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from datetime import datetime
 
 from schemas.booking import BookingStatus
-from src.repository.database.db import Base
+from database.db import Base
 
 class Booking(Base):
     __tablename__ = "bookings"
