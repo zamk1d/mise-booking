@@ -4,6 +4,8 @@ from enum import Enum
 
 from pydantic import BaseModel, Field, ConfigDict, field_validator, model_validator
 
+from src.core.config import settings
+
 
 class BookingStatus(str, Enum):
     active = "active"
@@ -29,8 +31,8 @@ class BookingBase(BaseModel):
     @field_validator("name")
     @classmethod
     def validate_name(cls, value: str) -> str:
-        if not re.fullmatch(r"[A-Za-zA-Яя-Ёё\s\-]+", value):
-            raise ValueError("Name must be only leters, spaces and hyphens")
+        if not re.fullmatch(r"[A-Za-zА-Яа-яЁё\s-]+", value):
+            raise ValueError("Name must be only letters, spaces and hyphens")
         return value
 
     @field_validator("phone")
@@ -70,7 +72,7 @@ class BookingCreate(BookingBase):
     def validate_booking_time(cls, value: time) -> time:
         if value.minute != 0 or value.second != 0:
             raise ValueError("Only hourly slots are allowed")
-        if value.hour not in range(12, 23):
+        if value.hour not in range(settings.open_hour, settings.close_hour):
             raise ValueError("Only reservation between 12:00 and 23:00 is allowed")
         return value
 

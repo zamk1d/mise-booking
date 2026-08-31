@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     app_name: str = "mise-booking"
     debug: bool = False
     DB_PATH: str = "./app.db"
+    open_hour: int = 12
+    close_hour: int = 23
 
     @property
     def database_url(self) -> str:
