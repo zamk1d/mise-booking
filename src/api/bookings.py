@@ -19,7 +19,7 @@ async def create_booking(
 ) -> BookingResponse:
     """creates new booking after validation and checking accessibility for booking"""
     created_booking = await service.create_booking(data)
-    return BookingResponse(**created_booking)
+    return BookingResponse.model_validate(created_booking)
 
 @api.get("/", status_code=200, response_model=list[BookingResponse])
 async def get_bookings(
@@ -49,7 +49,7 @@ async def get_booking(
     except BookingNotFoundError:
         raise HTTPException(status_code=404, detail="Booking not found")
 
-    return BookingResponse(**booking)
+    return BookingResponse.model_validate(booking)
 
 @api.delete("/{booking_id}", status_code=204)
 async def delete_booking(
