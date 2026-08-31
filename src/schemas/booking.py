@@ -12,7 +12,7 @@ class BookingStatus(str, Enum):
 class BookingBase(BaseModel):
     name: str = Field(min_length=2)
     phone: str
-    guests: int = Field(ge=1, le=12)
+    guests_number: int = Field(ge=1, le=12)
 
     @field_validator("phone")
     @classmethod
