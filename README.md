@@ -28,6 +28,7 @@ docker-compose up --build
 `https://docs.astral.sh/uv/getting-started/installation/`
 ```
 cp .env.example .env
+mkdir -d data
 uv sync
 uv run alembic upgrade head
 uv run uvicorn src.main:app --reload
