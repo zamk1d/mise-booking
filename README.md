@@ -1,33 +1,51 @@
-# mise-booking
+# Mise-booking
 
-## Description
-Mise-booking - is a test task, that realizing a REST API for book a table at a restaurants.
+## Описание
+**Mise-booking** - тестовое задание на реализацию REST API для бронирования столика в ресторане.
+Практики, технологии и задачи были реализованы в точности с требованиями, указанным в документе тестового задания (*MISE_Тестовоe_Trainee_Backend_Python.pdf*)
+#### Реализованный функционал
+Cоответствует требованием из документа с заданием:
 
-## Task
-REST API must realize endpoints for creating a book, getting books list, getting book by id and cancel books.
+реализованы методы:
+  - /bookings POST с проверкой на наличие брони на указанное время
+  - /bookings GET с валидацией значений query параметров для пагинации
+  - /bookings/{id} GET с обработкой исключения 404 если бронь не найдена
+  - /bookings/{id} DELETE с обработкой исключения 404 если бронь не найдена
+- Реализованы pydantic-схемы с валидацией, описанием полей и примерами
+- Реализован Dockerfile с автопринятием миграции для запуска проекта через Docker одной командой
+- Реализована возможность запуска проекта локально без Docker без надобности изменять значения DB_PATH в .env
+- Добавлен uv как пакетный менеджер с отдельной группой для разработки dev
+- Написаны интеграционные и юнит-тесты со 100%-ым покрытием
 
-### Endpoints
-- `POST` **/bookings:** *creates a book*
-- `GET` **/bookings:** *books list, filter by date*
-- `GET` **/bookings/{id}:** *get book by id*
-- 'DELETE' **/bookings/{id}:** *cancel the book*
+## Запуск
+### Через Docker
+```
+cp .env.example .env
+docker-compose up --build
+```
+### Локально:
+установить uv:
+`https://docs.astral.sh/uv/getting-started/installation/`
+```
+cp .env.example .env
+uv sync
+uv run alembic upgrade head
+uv run uvicorn src.main:app --reload
+```
 
-### Book data
-- `name` **guest name**
-- `phone` **guest phone, RU format**
-- `booking_date` **book date**
-- `booking_time` **book time by slots**
-- `guests` **only digits from 1 to 12**
+После запуска: Swagger — http://localhost:8000/docs, ReDoc — http://localhost:8000/redoc
 
-## Stack
-- **python 3.11**
-- **FastAPI**
-- **Pydantic v2**
-- **SQLAlchemy 2.0**
-- **Uvicorn**
-- **Alembic**
-- **Pytest**
-- **httpx**
-- **Dockerfile**
-- **docker-compose**
-- **Poetry**
+## Какие решения были приняты
+Была выбрана классическая слоистая архитектура, т.к. она позволяет облегчить порог входа и понимания в проекте.
+Async SQLAlchemy 2.0 + Alembic — чтобы показать рабочий вариант с миграциями. 
+Проверка занятости слота сделана на уровне сервиса (get_by_datetime перед созданием).
+Также писал архитектуру проекта и бизнес логику так, чтобы проект предусматривал потенциальное развитие и добавление новой бизнес-логики, инструментов и функционала.
+
+## Что бы доделал
+- Ограничение на добавление в БД по составному ключу даты и времени, чтобы закрыть гонку при одновременных запросах
+- Расширение функционала до автоматического снятия брони по прошествию посещения ресторана для динамического обновления доступных слотов на бронирование:
+  - Добавить для booking status третье состояние "actual", которое дается брони в момент подтверждения прибытия клиента
+  - Закреплять за бронью номер стола для идентификации
+  - Добавить через kafka consumer обработку топика для перевода статуса "actual" в "canceled" / "finished", в момент, когда система будет слать в топик сообщение о завершении посещения клиента (например, система зарегистрировала чек за закрепленным столиком в момент актуальной брони на него)
+- Больше тест-сценариев для схем и базы данных
+- Больше кастомных исключений для обработок большего количества возможных исключений
